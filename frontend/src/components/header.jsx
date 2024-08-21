@@ -1,55 +1,64 @@
-import React from 'react'
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   return (
     <div>
-    <header className="bg-white shadow-md p-4">
-      <div className=" flex items-center justify-between">
-        {/* Logo */}
-        <div className="flex items-center space-x-4">
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/OLX_New_Logo.png/1200px-OLX_New_Logo.png"
-            alt="OLX Logo"
-            className="h-8"
-          />
+      <header className="bg-white shadow-md p-4">
+        <div className="flex items-center justify-between">
+          {/* Left Section: Logo at the Top Left Corner */}
+          <div className="flex items-center">
+            <Link to="/" className="text-4xl text-teal-500 font-bold">UniHub</Link>
+          </div>
         </div>
 
-        {/* Location Selector */}
-        <div className="flex items-center space-x-2">
-          <span className="text-gray-600">Your Location:</span>
-          <select className="border border-gray-300 rounded p-1">
-            <option>Select Location</option>
-            <option>KGEC, Kalyani</option>
-            <option>IISER, Kalyani</option>
-            <option>IIIT, Kalyani</option>
-          </select>
+        {/* Center Section: Location Selector & Search Bar */}
+        <div className="flex items-center justify-center space-x-4 mt-4">
+          {/* Location Dropdown */}
+          <div className="flex items-center space-x-2">
+            <span className="text-slate-700 font-semibold">Your Location:</span>
+            <select className="border border-teal-500 hover:border-teal-700 rounded p-2 font-semibold outline-none focus:ring-2 focus:ring-teal-500 transition duration-300 ease-in-out">
+              <option>Select Location</option>
+              <option>KGEC, Kalyani</option>
+              <option>IISER, Kalyani</option>
+              <option>IIIT, Kalyani</option>
+            </select>
+          </div>
+
+          {/* Search Bar */}
+          <div className="flex items-center flex-1">
+            <input
+              type="text"
+              placeholder="Search for books, instruments..."
+              className="w-full border border-teal-500 hover:border-teal-700 rounded-l p-2 font-semibold outline-none focus:ring-2 focus:ring-teal-500 transition duration-300 ease-in-out"
+            />
+            <button className="bg-teal-500 text-white p-2 rounded-r hover:bg-teal-600 transition duration-300 ease-in-out">
+              Search
+            </button>
+          </div>
+
+          {/* Right Section: Navigation Links */}
+          <div className="flex items-center space-x-4 ml-auto">
+            {/* Login Button */}
+            <Link
+              className="text-slate-700 hover:text-teal-600 font-semibold hover:underline transition duration-300 ease-in-out"
+              to="/login"
+            >
+              Login
+            </Link>
+
+            {/* Sell Button */}
+            <Link
+              className="bg-slate-700 text-white px-6 py-2 rounded-full border-2 border-slate-500 hover:bg-teal-600 hover:border-teal-600 transition duration-300 ease-in-out"
+              to="/sell"
+            >
+              Sell
+            </Link>
+          </div>
         </div>
-
-        {/* Search Bar */}
-        <div className="flex items-center flex-1 mx-4">
-          <input
-            type="text"
-            placeholder="Search for books, materials..."
-            className="w-full border border-gray-300 rounded-l p-2"
-          />
-          <button className="bg-blue-500 text-white p-2 rounded-r">
-            Search
-          </button>
-        </div>
-
-        {/* Navigation Links */}
-        <div className="flex items-center space-x-4">
-          <a href="#" className="text-gray-700 hover:text-black">Login</a>
-          <a href="#" className="bg-yellow-500 text-white px-4 py-2 rounded">
-            Sell
-          </a>
-        </div>
-      </div>
-    </header>
-
-
+      </header>
     </div>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;
