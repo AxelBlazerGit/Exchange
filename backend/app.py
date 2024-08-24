@@ -35,7 +35,7 @@ def sell_product():
     conn = connect_db()
     cursor = conn.cursor()
 
-    cursor.execute('''
+    cursor.execute('''  
         INSERT INTO listings (email, title, category, description, img, value)
         VALUES (?, ?, ?, ?, ?, ?)
     ''', (email, title, category, description, image_data, price))

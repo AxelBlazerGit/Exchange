@@ -74,7 +74,7 @@ const LoginForm = () => {
           <p className="text-teal-500 m-4 text-sm">
             Don't have an account?
             <Link
-              to="/sign"
+              to="/signup"
               className="underline underline-offset-4 text-teal-600 ml-1 cursor-pointer hover:text-slate-700 transition duration-300"
               onClick={() => setIsLogin(false)}
             >

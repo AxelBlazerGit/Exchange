@@ -46,6 +46,12 @@ const Header = () => {
             >
               Login
             </Link>
+            <Link
+              className="text-slate-700 hover:text-teal-600 font-semibold hover:underline transition duration-300 ease-in-out"
+              to="/signup"
+            >
+              Signup
+            </Link>
 
             {/* Sell Button */}
             <Link

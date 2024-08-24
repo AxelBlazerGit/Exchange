@@ -13,7 +13,8 @@ const SignUpForm = () => {
 
   const navigate = useNavigate(); // For redirection
 
-  const handleSignUp = () => {
+  const handleSignUp = async (e) => {
+    e.preventDefault();
     const userRegistrationData = {
       name: registerName,
       email: registerEmail,
@@ -22,6 +23,15 @@ const SignUpForm = () => {
       place: registerPlace,
     };
     console.log(userRegistrationData);
+
+    const res = await fetch('http://localhost:5000/signup', {
+      method: 'POST',
+      body: JSON.stringify(userRegistrationData),
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+  console.log(res);
+  
 
     // Here you would typically send the data to the backend for signup
     // After signup is successful, redirect to homepage
@@ -53,7 +63,7 @@ const SignUpForm = () => {
             <Google className="text-white hover:text-teal-300 cursor-pointer" />
           </div>
 
-          <form onSubmit={handleSignUp} className="flex flex-col items-center justify-center mt-4">
+          <form onSubmit={(e) => handleSignUp(e)} className="flex flex-col items-center justify-center mt-4">
             <input
               id="registerName"
               name="registerName"
