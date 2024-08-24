@@ -12,7 +12,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LoginForm />} />
-          <Route path="/sign" element={<SignUpForm />} />
+          <Route path="/signup" element={<SignUpForm />} />
           <Route path="/sell" element={<Sell />} />
           {/* Pass the item ID to Product page dynamically */}
           <Route path="/product/:id" element={<Product />} />

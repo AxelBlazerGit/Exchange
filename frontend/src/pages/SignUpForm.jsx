@@ -13,23 +13,36 @@ const SignUpForm = () => {
 
   const navigate = useNavigate(); // For redirection
 
-  const handleSignUp = () => {
-    const userRegistrationData = {
-      name: registerName,
-      email: registerEmail,
-      password: registerPassword,
-      institution: registerInstitution,
-      place: registerPlace,
-    };
-    console.log(userRegistrationData);
-
-    // Here you would typically send the data to the backend for signup
-    // After signup is successful, redirect to homepage
-    // Simulating signup completion with a timeout for example purpose
-    setTimeout(() => {
-      navigate("/"); // Redirect to home page after successful signup
-    }, 1000); // Simulating a delay for signup completion
+const handleSignUp = async (ev) => {
+  ev.preventDefault();
+  const userRegistrationData = {
+    name: registerName,
+    email: registerEmail,
+    password: registerPassword,
+    institution: registerInstitution,
+    place: registerPlace,
   };
+
+  try {
+    const response = await fetch('http://localhost:5000/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userRegistrationData),
+    });
+
+    if (response.ok) {
+      // Handle successful signup (e.g., navigate to home page)
+      navigate('/');
+    } else {
+      // Handle errors (e.g., display an error message)
+      console.error('Signup failed');
+    }
+  } catch (error) {
+    console.error('Error during signup:', error);
+  }
+};
 
   return (
     <div className="bg-teal-50 flex flex-col items-center justify-center min-h-screen md:py-2">
@@ -53,7 +66,7 @@ const SignUpForm = () => {
             <Google className="text-white hover:text-teal-300 cursor-pointer" />
           </div>
 
-          <div className="flex flex-col items-center justify-center mt-4">
+          <form onSubmit={handleSignUp} className="flex flex-col items-center justify-center mt-4">
             <input
               id="registerName"
               name="registerName"
@@ -99,13 +112,13 @@ const SignUpForm = () => {
               value={registerPlace}
               onChange={(e) => setRegisterPlace(e.target.value)}
             />
-            <button
-              onClick={handleSignUp}
+            <input
+              type='submit'
               className="rounded-2xl m-2 text-teal-500 bg-white w-1/2 px-4 py-2 shadow-md hover:bg-teal-500 hover:text-white border-[2px] border-teal-500 transition duration-300 inline"
-            >
-              Sign Up
-            </button>
-          </div>
+              value={"Sign Up"}
+            />
+              
+          </form>
 
           <p className="text-white m-4 text-sm">
             Already have an account?
