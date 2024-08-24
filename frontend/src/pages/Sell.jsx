@@ -85,9 +85,10 @@ const Sell = () => {
               onChange={handleChange}
             >
               <option>Select Category</option>
-              <option>Electronics</option>
-              <option>Fashion</option>
-              <option>Home & Kitchen</option>
+              <option>Books</option>
+              <option>Intruments</option>
+              <option>Utilities</option>
+              <option>Notes</option>
             </select>
           </div>
           <div className="mb-6">

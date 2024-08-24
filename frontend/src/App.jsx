@@ -1,8 +1,9 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from './pages/Home';
-import Login from "./pages/Login";
 import Sell from "./pages/Sell";
 import Product from "./pages/Product";
+import LoginForm from "./pages/LoginForm";
+import SignUpForm from "./pages/SignUpForm";
 
 function App() {
   return (
@@ -10,7 +11,8 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/sign" element={<SignUpForm />} />
           <Route path="/sell" element={<Sell />} />
           {/* Pass the item ID to Product page dynamically */}
           <Route path="/product/:id" element={<Product />} />
