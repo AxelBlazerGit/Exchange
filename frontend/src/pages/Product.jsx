@@ -1,78 +1,43 @@
-import React from 'react';
+  import React, { useState, useEffect } from 'react';
+  import { useParams } from 'react-router-dom';
+  import a from '../assets/sell';
 
-const Product = () => {
-  return (
-    <div className="max-w-2xl mx-auto bg-white shadow-md h-screen rounded-lg p-6">
-      <h2 className="text-2xl font-bold mb-4">Add New Product</h2>
-      <form>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-            Name
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="name"
-            type="text"
-            placeholder="Product Name"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="category">
-            Category
-          </label>
-          <select
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="category"
-          >
-            <option>Select Category</option>
-            <option>Electronics</option>
-            <option>Fashion</option>
-            <option>Home & Kitchen</option>
-          </select>
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="price">
-            Price
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="price"
-            type="number"
-            placeholder="Price"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
-            Description
-          </label>
-          <textarea
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="description"
-            placeholder="Product Description"
-            rows="4"
-          ></textarea>
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="photos">
-            Photos
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="photos"
-            type="file"
-          />
-        </div>
-        <div className="flex items-center justify-between">
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="submit"
-          >
-            Upload and Submit
-          </button>
-        </div>
-      </form>
-    </div>
-  );
-};
+  const Product = () => {
+    const { id } = useParams();
+    const [product, setProduct] = useState(null);
 
-export default Product;
+    useEffect(() => {
+      console.log('Product ID:', id);  // Debugging: check the id
+      const selectedProduct = a.find(item => item.id === parseInt(id));
+      console.log('Selected Product:', selectedProduct);  // Debugging: check the product
+
+      setProduct(selectedProduct);
+    }, [id]);
+
+    if (!product) {
+      return <div>Product not found</div>;  // Handle case where product is not found
+    }
+
+    return (
+      <div className="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6">
+        <div className="flex">
+          <div className="w-1/2">
+            <img className="object-cover h-full w-full" src={product.pic} alt="Product" />
+          </div>
+          <div className="w-1/2 pl-4">
+            <h2 className="text-2xl font-bold mb-2">{product.desc}</h2>
+            <p className="text-gray-700 text-xl mb-4">₹ {product.price}</p>
+            <p className="text-gray-600 mb-4">{product.details}</p>
+            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              Chat with seller
+            </button>
+          </div>
+        </div>
+        <div className="mt-4">
+          <p className="text-gray-600">Posted in {product.place}</p>
+        </div>
+      </div>
+    );
+  };
+
+  export default Product;

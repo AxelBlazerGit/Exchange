@@ -2,7 +2,7 @@ import React from 'react';
 
 const Sell = () => {
   return (
-    <div className="min-h-screen flex flex-col items-center bg-gray-100 py-10">
+    <div className="min-h-screen flex flex-col items-center bg-teal-0 ">
       <div className="max-w-2xl w-full bg-white shadow-md rounded-lg p-8 mt-10 border-2 border-gray-200">
         <div className="flex items-center justify-start">
           <button className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 px-4 rounded-full mr-4">
