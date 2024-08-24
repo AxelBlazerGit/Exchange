@@ -14,7 +14,7 @@ const ContactFeedback = () => {
             <span className="font-bold">Phone:</span> +91 6291830010
           </p>
           <p className="mb-2">
-            <span className="font-bold">Email:</span> pullrequest@gmail.com
+            <span className="font-bold">Email:</span> requestpull4@gmail.com
           </p>
         </div>
       </div>
