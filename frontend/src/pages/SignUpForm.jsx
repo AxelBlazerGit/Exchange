@@ -13,7 +13,7 @@ const SignUpForm = () => {
 
   const navigate = useNavigate(); // For redirection
 
-  const handleSignUp = async () => {
+  const handleSignUp = () => {
     const userRegistrationData = {
       name: registerName,
       email: registerEmail,
@@ -21,15 +21,14 @@ const SignUpForm = () => {
       institution: registerInstitution,
       place: registerPlace,
     };
-    
-    try {
-      const response = await axios.post('http://localhost:5000/signup', userRegistrationData);
-      console.log(response.data);
+    console.log(userRegistrationData);
+
+    // Here you would typically send the data to the backend for signup
+    // After signup is successful, redirect to homepage
+    // Simulating signup completion with a timeout for example purpose
+    setTimeout(() => {
       navigate("/"); // Redirect to home page after successful signup
-    } catch (error) {
-      console.error("There was an error!", error);
-      // Handle errors (e.g., show error message to user)
-    }
+    }, 1000); // Simulating a delay for signup completion
   };
 
   return (
@@ -54,7 +53,7 @@ const SignUpForm = () => {
             <Google className="text-white hover:text-teal-300 cursor-pointer" />
           </div>
 
-          <div className="flex flex-col items-center justify-center mt-4">
+          <form onSubmit={handleSignUp} className="flex flex-col items-center justify-center mt-4">
             <input
               id="registerName"
               name="registerName"
@@ -100,13 +99,13 @@ const SignUpForm = () => {
               value={registerPlace}
               onChange={(e) => setRegisterPlace(e.target.value)}
             />
-            <button
-              onClick={handleSignUp}
+            <input
+              type='submit'
               className="rounded-2xl m-2 text-teal-500 bg-white w-1/2 px-4 py-2 shadow-md hover:bg-teal-500 hover:text-white border-[2px] border-teal-500 transition duration-300 inline"
-            >
-              Sign Up
-            </button>
-          </div>
+              value={"Sign Up"}
+            />
+              
+          </form>
 
           <p className="text-white m-4 text-sm">
             Already have an account?
