@@ -23,10 +23,10 @@ app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });
 
-
+const env = require("dotenv");
 const mongoose = require('mongoose');
-const uri = "mongodb+srv://requestpull4:xKPZsKJs0ArwSv5P@unihubcluster0.baf52.mongodb.net/?retryWrites=true&w=majority&appName=UniHubCluster0";
 
+const uri = process.env.MONGO_URI
 const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
 
 async function run() {
