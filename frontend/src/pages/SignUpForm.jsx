@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Facebook, GitHub, Google } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios'; // Import axios
 
 const SignUpForm = () => {
   const [isLogin, setIsLogin] = useState(true);
-
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
   const [registerName, setRegisterName] = useState("");
@@ -13,36 +13,23 @@ const SignUpForm = () => {
 
   const navigate = useNavigate(); // For redirection
 
-const handleSignUp = async (ev) => {
-  ev.preventDefault();
-  const userRegistrationData = {
-    name: registerName,
-    email: registerEmail,
-    password: registerPassword,
-    institution: registerInstitution,
-    place: registerPlace,
+  const handleSignUp = () => {
+    const userRegistrationData = {
+      name: registerName,
+      email: registerEmail,
+      password: registerPassword,
+      institution: registerInstitution,
+      place: registerPlace,
+    };
+    console.log(userRegistrationData);
+
+    // Here you would typically send the data to the backend for signup
+    // After signup is successful, redirect to homepage
+    // Simulating signup completion with a timeout for example purpose
+    setTimeout(() => {
+      navigate("/"); // Redirect to home page after successful signup
+    }, 1000); // Simulating a delay for signup completion
   };
-
-  try {
-    const response = await fetch('http://localhost:5000/signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(userRegistrationData),
-    });
-
-    if (response.ok) {
-      // Handle successful signup (e.g., navigate to home page)
-      navigate('/');
-    } else {
-      // Handle errors (e.g., display an error message)
-      console.error('Signup failed');
-    }
-  } catch (error) {
-    console.error('Error during signup:', error);
-  }
-};
 
   return (
     <div className="bg-teal-50 flex flex-col items-center justify-center min-h-screen md:py-2">
