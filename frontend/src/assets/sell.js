@@ -1,9 +1,9 @@
-import book1 from './images/book1.jpg';
-import book2 from './images/book2.jpeg';
-import book3 from './images/book3.jpeg';
-import book4 from './images/book4.jpeg';
-import book5 from './images/book5.jpeg';
-import book6 from './images/book6.jpeg';
+import book1 from './images/books/book1.jpg';
+import book2 from './images/books/book2.jpeg';
+import book3 from './images/books/book3.jpeg';
+import book4 from './images/books/book4.jpeg';
+import book5 from './images/books/book5.jpeg';
+import book6 from './images/instruments/book6.jpeg';
 
 
 export {book1,book2,book3};

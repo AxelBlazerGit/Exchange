@@ -57,9 +57,9 @@ const Login = () => {
         </div>
 
         <div className="flex flex-col items-center justify-center mt-4">
-          <input type="text" className="rounded-2xl px-4 py-2 w-4/5 md:w-full border-[2px] border-teal-400 m-2 focus:shadow-lg focus:border-white focus:outline-none transition duration-300" placeholder="Name" />
-          <input type="email" className="rounded-2xl px-4 py-2 w-4/5 md:w-full border-[2px] border-teal-400 m-2 focus:shadow-lg focus:border-white focus:outline-none transition duration-300" placeholder="Email" />
-          <input type="password" className="rounded-2xl px-4 py-2 w-4/5 md:w-full border-[2px] border-teal-400 m-2 focus:shadow-lg focus:border-white focus:outline-none transition duration-300" placeholder="Password" />
+          <input type="text" className="rounded-2xl px-4 py-2 w-4/5 md:w-full border-[2px] border-teal-400 m-2 focus:shadow-lg focus:border-white focus:outline-none transition duration-300 text-black" placeholder="Name" />
+          <input type="email" className="rounded-2xl px-4 py-2 w-4/5 md:w-full border-[2px] border-teal-400 m-2 focus:shadow-lg focus:border-white focus:outline-none transition duration-300 text-black" placeholder="Email" />
+          <input type="password" className="rounded-2xl px-4 py-2 w-4/5 md:w-full border-[2px] border-teal-400 m-2 focus:shadow-lg focus:border-white focus:outline-none transition duration-300 text-black" placeholder="Password" />
           <button className="rounded-2xl m-2 text-teal-500 bg-white w-3/5 px-4 py-2 shadow-md hover:bg-teal-500 hover:text-white border-[2px] border-teal-500 transition duration-300">
             Sign Up
           </button>

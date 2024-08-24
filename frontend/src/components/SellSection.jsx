@@ -75,7 +75,7 @@ const SellSection = () => {
             className="absolute left-5 top-1/2 transform -translate-y-1/2 bg-teal-500 text-white p-4 rounded-full shadow-lg hover:bg-teal-600 hover:scale-110 transition-all duration-300 z-10"
             onClick={() => scrollLeft(section.ref)}
           >
-            &#8249;
+            ←
           </button>
 
           {/* Fading Effect - Left */}
@@ -109,7 +109,7 @@ const SellSection = () => {
             className="absolute right-5 top-1/2 transform -translate-y-1/2 bg-teal-500 text-white p-4 rounded-full shadow-lg hover:bg-teal-600 hover:scale-110 transition-all duration-300 z-10"
             onClick={() => scrollRight(section.ref)}
           >
-            &#8250;
+            →
           </button>
         </div>
       ))}
