@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Facebook, GitHub, Google } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios'; // Import axios
 
 const SignUpForm = () => {
   const [isLogin, setIsLogin] = useState(true);
-
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
   const [registerName, setRegisterName] = useState("");
@@ -13,7 +13,7 @@ const SignUpForm = () => {
 
   const navigate = useNavigate(); // For redirection
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     const userRegistrationData = {
       name: registerName,
       email: registerEmail,
@@ -21,14 +21,15 @@ const SignUpForm = () => {
       institution: registerInstitution,
       place: registerPlace,
     };
-    console.log(userRegistrationData);
-
-    // Here you would typically send the data to the backend for signup
-    // After signup is successful, redirect to homepage
-    // Simulating signup completion with a timeout for example purpose
-    setTimeout(() => {
+    
+    try {
+      const response = await axios.post('http://localhost:5000/signup', userRegistrationData);
+      console.log(response.data);
       navigate("/"); // Redirect to home page after successful signup
-    }, 1000); // Simulating a delay for signup completion
+    } catch (error) {
+      console.error("There was an error!", error);
+      // Handle errors (e.g., show error message to user)
+    }
   };
 
   return (
