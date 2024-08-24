@@ -1,19 +1,70 @@
-import React,{useState} from 'react'
-import {Facebook,GitHub,Google} from '@mui/icons-material'
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Facebook, GitHub, Google } from '@mui/icons-material';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  const [isLogin, setIsLogin] = useState(true);
 
-  const [isLogin,setIsLogin] = useState(true);
+  // Login state
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
 
-  const [loginEmail,setLoginEmail] = useState("");
-  const [loginPassword,setLoginPassword] = useState("");
+  // Register state
+  const [registerEmail, setRegisterEmail] = useState('');
+  const [registerPassword, setRegisterPassword] = useState('');
+  const [registerName, setRegisterName] = useState('');
+  const [registerInstitution, setRegisterInstitution] = useState('');
+  const [registerCity, setRegisterCity] = useState('');
 
-  const [registerEmail,setRegisterEmail] = useState("");
-  const [registerPassword,setRegisterPassword] = useState("");
-  const [registerName,setRegisterName] = useState("");
-  const [registerAvatar,setRegisterAvatar] = useState("");
-  
+  const navigate = useNavigate();
+
+  // Login handler
+  const handleLogin = async () => {
+    const response = await fetch('http://localhost:5000/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: loginEmail,
+        password: loginPassword,
+      }),
+    });
+
+    const data = await response.json();
+    if (data.message === 'Login successful!') {
+      alert('Login successful!');
+      navigate('/listings');  // Redirect user to listings after successful login
+    } else {
+      alert('Invalid credentials');
+    }
+  };
+
+  // Sign-up handler
+  const handleSignUp = async () => {
+    const response = await fetch('http://localhost:5000/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: registerEmail,
+        password: registerPassword,
+        name: registerName,
+        institution: registerInstitution,
+        city: registerCity,
+      }),
+    });
+
+    const data = await response.json();
+    if (data.message === 'Signup successful!') {
+      alert('Signup successful! You can now log in.');
+      setIsLogin(true); // Switch to login form after successful signup
+    } else {
+      alert('Signup failed. Please try again.');
+    }
+  };
+
   const LoginForm = () => {
     return (
       <div className="bg-teal-100 rounded-2xl shadow-2xl flex flex-col w-full md:w-1/3 items-center max-w-4xl transition duration-1000 ease-out p-6">
@@ -21,16 +72,10 @@ const Login = () => {
         <div className="inline-block border-[2px] justify-center w-20 border-teal-400 border-solid mb-2"></div>
         <h3 className="text-xl font-semibold text-teal-500 pt-2">Sign In!</h3>
 
-        <div className="flex space-x-4 mt-4 items-center justify-center">
-          <Facebook className="text-teal-500 hover:text-teal-700 cursor-pointer" />
-          <GitHub className="text-teal-500 hover:text-teal-700 cursor-pointer" />
-          <Google className="text-teal-500 hover:text-teal-700 cursor-pointer" />
-        </div>
-
         <div className="flex flex-col items-center justify-center mt-4">
-          <input type="email" className="rounded-2xl px-4 py-2 w-4/5 md:w-full border-[2px] border-teal-400 m-2 focus:shadow-lg focus:border-slate-700 focus:outline-none transition duration-300" placeholder="Email" />
-          <input type="password" className="rounded-2xl px-4 py-2 w-4/5 md:w-full border-[2px] border-teal-400 m-2 focus:shadow-lg focus:border-slate-700 focus:outline-none transition duration-300" placeholder="Password" />
-          <button className="rounded-2xl m-2 text-white bg-teal-500 w-3/5 px-4 py-2 shadow-md hover:text-teal-500 hover:bg-white border-[2px] border-teal-500 transition duration-300">
+          <input type="email" value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} className="rounded-2xl px-4 py-2 w-4/5 md:w-full border-[2px] border-teal-400 m-2 focus:shadow-lg focus:border-slate-700 focus:outline-none transition duration-300" placeholder="Email" />
+          <input type="password" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} className="rounded-2xl px-4 py-2 w-4/5 md:w-full border-[2px] border-teal-400 m-2 focus:shadow-lg focus:border-slate-700 focus:outline-none transition duration-300" placeholder="Password" />
+          <button onClick={handleLogin} className="rounded-2xl m-2 text-white bg-teal-500 w-3/5 px-4 py-2 shadow-md hover:text-teal-500 hover:bg-white border-[2px] border-teal-500 transition duration-300">
             Sign In
           </button>
         </div>
@@ -50,17 +95,13 @@ const Login = () => {
         <div className="inline-block border-[2px] justify-center w-20 border-white mb-2"></div>
         <h3 className="text-xl font-semibold text-white pt-2">Create Account!</h3>
 
-        <div className="flex space-x-4 mt-4 items-center justify-center">
-          <Facebook className="text-white hover:text-teal-300 cursor-pointer" />
-          <GitHub className="text-white hover:text-teal-300 cursor-pointer" />
-          <Google className="text-white hover:text-teal-300 cursor-pointer" />
-        </div>
-
         <div className="flex flex-col items-center justify-center mt-4">
-          <input type="text" className="rounded-2xl px-4 py-2 w-4/5 md:w-full border-[2px] border-teal-400 m-2 focus:shadow-lg focus:border-white focus:outline-none transition duration-300 text-black" placeholder="Name" />
-          <input type="email" className="rounded-2xl px-4 py-2 w-4/5 md:w-full border-[2px] border-teal-400 m-2 focus:shadow-lg focus:border-white focus:outline-none transition duration-300 text-black" placeholder="Email" />
-          <input type="password" className="rounded-2xl px-4 py-2 w-4/5 md:w-full border-[2px] border-teal-400 m-2 focus:shadow-lg focus:border-white focus:outline-none transition duration-300 text-black" placeholder="Password" />
-          <button className="rounded-2xl m-2 text-teal-500 bg-white w-3/5 px-4 py-2 shadow-md hover:bg-teal-500 hover:text-white border-[2px] border-teal-500 transition duration-300">
+          <input type="text" value={registerName} onChange={(e) => setRegisterName(e.target.value)} className="rounded-2xl px-4 py-2 w-4/5 md:w-full border-[2px] border-teal-400 m-2 focus:shadow-lg focus:border-white focus:outline-none transition duration-300 text-black" placeholder="Name" />
+          <input type="email" value={registerEmail} onChange={(e) => setRegisterEmail(e.target.value)} className="rounded-2xl px-4 py-2 w-4/5 md:w-full border-[2px] border-teal-400 m-2 focus:shadow-lg focus:border-white focus:outline-none transition duration-300 text-black" placeholder="Email" />
+          <input type="password" value={registerPassword} onChange={(e) => setRegisterPassword(e.target.value)} className="rounded-2xl px-4 py-2 w-4/5 md:w-full border-[2px] border-teal-400 m-2 focus:shadow-lg focus:border-white focus:outline-none transition duration-300 text-black" placeholder="Password" />
+          <input type="text" value={registerInstitution} onChange={(e) => setRegisterInstitution(e.target.value)} className="rounded-2xl px-4 py-2 w-4/5 md:w-full border-[2px] border-teal-400 m-2 focus:shadow-lg focus:border-white focus:outline-none transition duration-300 text-black" placeholder="Institution" />
+          <input type="text" value={registerCity} onChange={(e) => setRegisterCity(e.target.value)} className="rounded-2xl px-4 py-2 w-4/5 md:w-full border-[2px] border-teal-400 m-2 focus:shadow-lg focus:border-white focus:outline-none transition duration-300 text-black" placeholder="City" />
+          <button onClick={handleSignUp} className="rounded-2xl m-2 text-teal-500 bg-white w-3/5 px-4 py-2 shadow-md hover:bg-teal-500 hover:text-white border-[2px] border-teal-500 transition duration-300">
             Sign Up
           </button>
         </div>

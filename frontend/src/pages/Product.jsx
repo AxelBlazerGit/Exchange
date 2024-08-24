@@ -1,43 +1,37 @@
-  import React, { useState, useEffect } from 'react';
-  import { useParams } from 'react-router-dom';
-  import a from '../assets/sell';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
-  const Product = () => {
-    const { id } = useParams();
-    const [product, setProduct] = useState(null);
+const Product = () => {
+  const { id } = useParams();  // Get product ID from the URL
+  const [product, setProduct] = useState(null);
 
-    useEffect(() => {
-      console.log('Product ID:', id);  // Debugging: check the id
-      const selectedProduct = a.find(item => item.id === parseInt(id));
-      console.log('Selected Product:', selectedProduct);  // Debugging: check the product
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/products/${id}`);
+        const data = await response.json();
+        setProduct(data);
+      } catch (error) {
+        console.error("Error fetching product: ", error);
+      }
+    };
 
-      setProduct(selectedProduct);
-    }, [id]);
+    fetchProduct();
+  }, [id]);
 
-    if (!product) {
-      return <div>Product not found</div>;  // Handle case where product is not found
-    }
+  if (!product) return <div>Loading...</div>;
 
-    return (
-      <div className="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6">
-        <div className="flex">
-          <div className="w-1/2">
-            <img className="object-cover h-full w-full" src={product.pic} alt="Product" />
-          </div>
-          <div className="w-1/2 pl-4">
-            <h2 className="text-2xl font-bold mb-2">{product.desc}</h2>
-            <p className="text-gray-700 text-xl mb-4">₹ {product.price}</p>
-            <p className="text-gray-600 mb-4">{product.details}</p>
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-              Chat with seller
-            </button>
-          </div>
-        </div>
-        <div className="mt-4">
-          <p className="text-gray-600">Posted in {product.place}</p>
-        </div>
+  return (
+    <div className="container mx-auto py-10">
+      <div className="flex flex-col items-center">
+        <h1 className="text-3xl font-bold mb-4">{product.title}</h1>
+        <img className="w-1/3 h-auto object-cover" src={`data:image/png;base64,${product.image}`} alt={product.title} />
+        <p className="mt-4 text-lg">{product.description}</p>
+        <p className="mt-2 text-teal-600 text-2xl">${product.price}</p>
+        <button className="mt-4 px-6 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600">Buy Now</button>
       </div>
-    );
-  };
+    </div>
+  );
+};
 
-  export default Product;
+export default Product;
