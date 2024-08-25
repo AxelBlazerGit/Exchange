@@ -211,12 +211,39 @@ def sign_up():
 
     return jsonify({'message': 'Signup successful!'}), 200
 
+
+@app.route('/allListing', methods=['GET'])
+@cross_origin()
+def allListing():
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    # Fetch all values from the LISTINGS table
+    cursor.execute('''SELECT * FROM LISTINGS''')
+    listings = cursor.fetchall()
+
+    # Convert listings to a list of dictionaries
+    json_listings = [
+        {
+            'id': listing[0],
+            'title': listing[1],
+            'category': listing[2],
+            'description': listing[3],
+            'image': listing[4],  # Handle base64 encoding if necessary
+            'price': listing[5]
+        }
+        for listing in listings
+    ]
+
+    conn.close()
+    return jsonify(json_listings)
+
 if __name__ == '__main__':
     app.run(debug=True)
 
 # generate listings
 
-import random
+# import random
 
 # / route to send 5 JSONs as per the mentioned criteria
 # @app.route('/', methods=['GET'])
@@ -281,63 +308,6 @@ import random
 
 
 #   route to send 5 JSONs as per the mentioned criteria
-@app.route('/allListing', methods=['GET'])
-@cross_origin()
-def home():
-    email = request.args.get('email')
 
-    conn = connect_db()
-    cursor = conn.cursor()
-
-    if email:
-        # If email is provided (user is logged in), filter out user's own listings
-        cursor.execute('''
-            SELECT rowid, title, category, description, img, value FROM listings WHERE email != ?
-        ''', (email,))
-    else:
-        # If no email is provided, show all listings
-        cursor.execute('''
-            SELECT rowid, title, category, description, img, value FROM listings
-        ''')
-
-    all_listings = cursor.fetchall()
-    random_listings = random.sample(all_listings, min(12, len(all_listings)))
-
-    first_json = [dict(id=listing[0], title=listing[1], category=listing[2], description=listing[3], image=listing[4], price=listing[5]) for listing in random_listings]
-
-    # Helper function to fetch random listings by category and shuffle them internally
-    def get_random_listings_by_category(category):
-        if email:
-            cursor.execute('''
-                SELECT rowid, title, category, description, img, value FROM listings 
-                WHERE category = ? AND email != ?
-            ''', (category, email))
-        else:
-            cursor.execute('''
-                SELECT rowid, title, category, description, img, value FROM listings 
-                WHERE category = ?
-            ''', (category,))
-        cursor.execute('''SELECT * FROM LISTINGS''')
-        listings = cursor.fetchall()
-        random.shuffle(listings)
-        return listings[:min(20, len(listings))]
-
-    second_json = get_random_listings_by_category('books')
-    third_json = get_random_listings_by_category('instruments')
-    fourth_json = get_random_listings_by_category('notes')
-    fifth_json = get_random_listings_by_category('other utilities')
-
-    result = {
-        'first_json': [dict(id=listing[0], title=listing[1], category=listing[2], description=listing[3], image=listing[4], price=listing[5]) for listing in random_listings],
-        'second_json': [dict(id=listing[0], title=listing[1], category=listing[2], description=listing[3], image=listing[4], price=listing[5]) for listing in second_json],
-        'third_json': [dict(id=listing[0], title=listing[1], category=listing[2], description=listing[3], image=listing[4], price=listing[5]) for listing in third_json],
-        'fourth_json': [dict(id=listing[0], title=listing[1], category=listing[2], description=listing[3], image=listing[4], price=listing[5]) for listing in fourth_json],
-        'fifth_json': [dict(id=listing[0], title=listing[1], category=listing[2], description=listing[3], image=listing[4], price=listing[5]) for listing in fifth_json],
-    }
-
-    conn.close()
-
-    return jsonify(result), 200
-
-if __name__ == '__main__':
-    app.run(debug=True)
+# if __name__ == '__main__':
+#     app.run(debug=True)
