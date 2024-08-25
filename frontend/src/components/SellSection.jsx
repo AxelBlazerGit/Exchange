@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import 'tailwindcss/tailwind.css';
 import Marquee from 'react-fast-marquee';
-import { Link } from 'react-router-dom';  // Import Link
-import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'; // Import arrow icons
+import { Link } from 'react-router-dom';  
+import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'; 
 
 const SellSection = () => {
+  const [marqueeItems, setMarqueeItems] = useState([]);
   const [books, setBooks] = useState([]);
   const [instruments, setInstruments] = useState([]);
   const [notes, setNotes] = useState([]);
@@ -29,22 +30,20 @@ const SellSection = () => {
     });
   };
 
-  // Fetch listings from the backend
   useEffect(() => {
     const fetchListings = async () => {
       try {
-        const response = await fetch('http://localhost:5000/listings?email=your_email@example.com'); // Use logged-in user's email
+        const response = await fetch('http://localhost:5000/?email=your_email@example.com'); 
         const data = await response.json();
-        // Assuming `category` helps divide products into books, instruments, etc.
-        const booksData = data.filter(item => item.category === "BOOKS");
-        const instrumentsData = data.filter(item => item.category === "INSTRUMENTS");
-        const notesData = data.filter(item => item.category === "NOTES");
-        const otherData = data.filter(item => item.category === "OTHER UTILITIES");
-        
-        setBooks(booksData);
-        setInstruments(instrumentsData);
-        setNotes(notesData);
-        setOthers(otherData);
+
+        // Set marquee listings from first_json
+        setMarqueeItems(data.first_json);
+
+        // Set category-based listings
+        setBooks(data.second_json);
+        setInstruments(data.third_json);
+        setNotes(data.fourth_json);
+        setOthers(data.fifth_json);
       } catch (error) {
         console.error("Error fetching listings: ", error);
       }
@@ -59,9 +58,9 @@ const SellSection = () => {
       <div className="w-full flex flex-row justify-center items-center">
         <Marquee gradient={true} speed={60} pauseOnHover={true} direction="left">
           <div className="flex flex-row gap-0 w-full justify-center items-center">
-            {books.map((item, idx) => (
+            {marqueeItems.map((item, idx) => (
               <div key={idx} className="rounded-lg border border-teal-500 w-64 h-36 max-w-lg m-2 mt-5 transform transition duration-300 ease-in-out hover:scale-105">
-                <Link to={`/product/${item.id}`}> {/* Add Link wrapping the product */}
+                <Link to={`/product/${item.id}`}> 
                   <div className="flex w-full h-full bg-white shadow-lg rounded-lg overflow-hidden">
                     <div className="w-1/3 bg-gray-300">
                       <img className="object-cover h-full w-full" src={`data:image/png;base64,${item.image}`} alt="Product" />
@@ -86,7 +85,7 @@ const SellSection = () => {
         </Marquee>
       </div>
 
-      {/* Section Component with Heading */}
+      {/* Scrollable Sections */}
       {[
         { name: "BOOKS", ref: booksRef, data: books },
         { name: "INSTRUMENTS", ref: instrumentsRef, data: instruments },
@@ -109,7 +108,7 @@ const SellSection = () => {
 
             <div className="flex overflow-x-scroll space-x-6 px-8 no-scrollbar" ref={section.ref}>
               {section.data.map((item, index) => (
-                <Link to={`/product/${item.id}`} key={index}>  {/* Add Link for each item */}
+                <Link to={`/product/${item.id}`} key={index}>
                   <div className="min-w-[300px] max-w-[300px] h-[300px] rounded-lg overflow-hidden shadow-xl bg-white border-4 border-teal-500 transform transition duration-300 ease-in-out hover:scale-105">
                     <div className="relative h-1/2">
                       <img className="w-full h-full object-cover" src={`data:image/png;base64,${item.image}`} alt={`Image of ${item.description}`} />
