@@ -1,52 +1,46 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
 const Sell = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    category: '',
-    price: '',
-    description: '',
-    image: null,
-  });
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [category, setCategory] = useState("");
+  const [price, setPrice] = useState("0");
+  const [description, setDescription] = useState("");
+  const [photos, setPhotos] = useState(null);
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.id]: e.target.type === 'file' ? e.target.files[0] : e.target.value,
-    });
-  };
+  const navigate = useNavigate(); 
 
-  const handleSubmit = async (e) => {
+  // Handle form submission
+  const handleSell = async (e) => {
     e.preventDefault();
 
-    const data = new FormData();
-    data.append('name', formData.name);
-    data.append('category', formData.category);
-    data.append('price', formData.price);
-    data.append('description', formData.description);
-    data.append('image', formData.image);
+    // Create a FormData object to send as multipart/form-data
+    const formData = new FormData();
+    formData.append('email', email);
+    formData.append('title', name); // 'title' corresponds to the backend's field
+    formData.append('category', category);
+    formData.append('price', price);
+    formData.append('description', description);
+    formData.append('image', photos); // 'image' corresponds to the backend's field
 
     try {
-      const response = await fetch('http://localhost:5000/api/products', {
+      const res = await fetch('http://localhost:5000/sell', {
         method: 'POST',
-        body: data,
+        body: formData,  // Sending FormData, not JSON
+        // No need for Content-Type, fetch will automatically set it when using FormData
       });
 
-      if (response.ok) {
-        alert('Product added successfully!');
-        setFormData({
-          name: '',
-          category: '',
-          price: '',
-          description: '',
-          image: null,
-        });
+      if (res.ok) {
+        console.log('Response:', await res.json());
+        setTimeout(() => {
+          navigate("/"); // Redirect to home page
+        }, 1000);
       } else {
-        alert('Failed to add product');
+        console.error('Failed to upload:', res.statusText);
       }
-    } catch (error) {
-      console.error('Error:', error);
-      alert('An error occurred while adding the product');
+    } catch (err) {
+      console.error('Error:', err);
     }
   };
 
@@ -60,7 +54,21 @@ const Sell = () => {
           <h2 className="text-3xl font-bold text-center flex-grow text-teal-500">Add New Product</h2>
         </div>
         <hr className="border-t-2 border-teal-500 mt-4 mb-6" />
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSell}>
+          {/* Form fields remain the same */}
+          <div className="mb-6">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+              Email
+            </label>
+            <input
+              className="shadow appearance-none border border-gray-300 rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:border-teal-500 focus:shadow-outline"
+              id="email"
+              type="email"
+              placeholder="Your Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
           <div className="mb-6">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
               Name
@@ -70,8 +78,8 @@ const Sell = () => {
               id="name"
               type="text"
               placeholder="Product Name"
-              value={formData.name}
-              onChange={handleChange}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             />
           </div>
           <div className="mb-6">
@@ -81,12 +89,12 @@ const Sell = () => {
             <select
               className="shadow appearance-none border border-gray-300 rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:border-teal-500 focus:shadow-outline"
               id="category"
-              value={formData.category}
-              onChange={handleChange}
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
             >
               <option>Select Category</option>
               <option>Books</option>
-              <option>Intruments</option>
+              <option>Instruments</option>
               <option>Utilities</option>
               <option>Notes</option>
             </select>
@@ -100,8 +108,8 @@ const Sell = () => {
               id="price"
               type="number"
               placeholder="Price"
-              value={formData.price}
-              onChange={handleChange}
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
             />
           </div>
           <div className="mb-6">
@@ -113,8 +121,8 @@ const Sell = () => {
               id="description"
               placeholder="Product Description"
               rows="4"
-              value={formData.description}
-              onChange={handleChange}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
             ></textarea>
           </div>
           <div className="mb-6">
@@ -125,7 +133,7 @@ const Sell = () => {
               className="shadow appearance-none border border-gray-300 rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:border-teal-500 focus:shadow-outline"
               id="photos"
               type="file"
-              onChange={handleChange}
+              onChange={(e) => setPhotos(e.target.files[0])}
             />
           </div>
           <div className="flex items-center justify-center mt-8">

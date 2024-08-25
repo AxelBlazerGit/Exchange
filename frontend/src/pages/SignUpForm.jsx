@@ -37,7 +37,7 @@ const SignUpForm = () => {
     // After signup is successful, redirect to homepage
     // Simulating signup completion with a timeout for example purpose
     setTimeout(() => {
-      navigate("/"); // Redirect to home page after successful signup
+      navigate("/login"); // Redirect to home page after successful signup
     }, 1000); // Simulating a delay for signup completion
   };
 

@@ -23,7 +23,7 @@ def sell_product():
     email = request.form.get('email')
     title = request.form.get('title')
     category = request.form.get('category')
-    price = float(request.form.get('price'))
+    price = (request.form.get('price'))
     description = request.form.get('description')
     image = request.files.get('image')
 
@@ -43,7 +43,10 @@ def sell_product():
     conn.commit()
     conn.close()
 
-    return redirect(url_for('view_listings', email=email))
+    # return 
+    return jsonify({'success': 'Product added'})
+    # return redirect(url_for('view_listings', email=email))
+
 
 # /listings route to view all listings of a signed-in user
 @app.route('/listings', methods=['GET'])
@@ -133,24 +136,56 @@ def get_product_by_id(id):
 @app.route('/login', methods=['POST'])
 @cross_origin()
 def login():
-    email = request.form.get('email')
-    password = request.form.get('password')
+    data = request.get_json()  # Parse JSON data
+    email = data.get('email')
+    password = data.get('password')
 
     conn = connect_db()
     cursor = conn.cursor()
 
     cursor.execute('''
-        SELECT * FROM profiles WHERE email = ? AND password = ?
-    ''', (email, password))
+        SELECT * FROM profiles WHERE email = ?
+    ''', (email,))
+    
     user = cursor.fetchone()
 
     if user:
-        message = 'Login successful!'
+        stored_password = user[2]  # Assuming password is stored in the 3rd column
+        if stored_password == password:
+            user_data = {
+                'name': user[1],
+                'email': user[0],
+                'institution': user[3],
+                'location': user[4]
+            }
+            conn.close()
+            return jsonify({'message': 'Login successful!', 'user': user_data}), 200
+        else:
+            conn.close()
+            return jsonify({'message': 'Incorrect password'}), 401
     else:
-        message = 'Invalid credentials'
+        conn.close()
+        return jsonify({'message': 'User not found'}), 404
 
-    conn.close()
-    return jsonify({'message': message}), 200
+# def login():
+#     email = request.form.get('email')
+#     password = request.form.get('password')
+
+#     conn = connect_db()
+#     cursor = conn.cursor()
+
+#     cursor.execute('''
+#         SELECT FROM profiles WHERE email = ? AND password = ?
+#     ''', (email, password))
+#     user = cursor.fetchone()
+
+#     if user:
+#         message = 'Login successful!'
+#     else:
+#         message = 'Invalid credentials'
+
+#     conn.close()
+#     return jsonify({'message': message}), 200
 
 
 @app.route('/signup', methods=['POST'])
@@ -177,3 +212,70 @@ def sign_up():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+# generate listings
+
+import random
+
+# / route to send 5 JSONs as per the mentioned criteria
+@app.route('/', methods=['GET'])
+@cross_origin()
+def home():
+    email = request.args.get('email')
+
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    # First JSON: Select 12 random listings excluding the logged-in user
+    cursor.execute('''
+        SELECT rowid, title, category, description, img, value FROM listings WHERE email != ?
+    ''', (email,))
+    all_listings = cursor.fetchall()
+    random_listings = random.sample(all_listings, min(12, len(all_listings)))
+
+    first_json = [
+        {
+            'id': listing[0],
+            'title': listing[1],
+            'category': listing[2],
+            'description': listing[3],
+            'image': listing[4],  # Handle base64 encoding as needed
+            'price': listing[5]
+        }
+        for listing in random_listings
+    ]
+
+    # Helper function to fetch random listings by category and shuffle them internally
+    def get_random_listings_by_category(category):
+        cursor.execute('''
+            SELECT rowid, title, category, description, img, value FROM listings 
+            WHERE category = ? AND email != ?
+        ''', (category, email))
+        listings = cursor.fetchall()
+        random.shuffle(listings)  # Shuffle the internal listings
+        return listings[:min(20, len(listings))]
+
+    # Second JSON: Listings in 'books' category
+    second_json = get_random_listings_by_category('books')
+    
+    # Third JSON: Listings in 'instruments' category
+    third_json = get_random_listings_by_category('instruments')
+
+    # Fourth JSON: Listings in 'notes' category
+    fourth_json = get_random_listings_by_category('notes')
+
+    # Fifth JSON: Listings in 'other utilities' category
+    fifth_json = get_random_listings_by_category('other utilities')
+
+    result = {
+        'first_json': first_json,
+        'second_json': second_json,
+        'third_json': third_json,
+        'fourth_json': fourth_json,
+        'fifth_json': fifth_json,
+    }
+
+    conn.close()
+
+    return jsonify(result), 200
+

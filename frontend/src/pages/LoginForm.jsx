@@ -1,25 +1,45 @@
 import React, { useState } from 'react';
 import { Facebook, GitHub, Google } from '@mui/icons-material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
   const [isLogin, setIsLogin] = useState(true);
-
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
+  const navigate = useNavigate();  // Initialize useNavigate for navigation
 
-  const [registerEmail, setRegisterEmail] = useState("");
-  const [registerPassword, setRegisterPassword] = useState("");
-  const [registerName, setRegisterName] = useState("");
-  const [registerAvatar, setRegisterAvatar] = useState("");
+  const handleLogin = async (e) => {
+    e.preventDefault();
 
-  const handleLogin = () => {
     const userLoginData = {
       email: loginEmail,
       password: loginPassword,
     };
-    console.log(userLoginData);
-    
+
+    try {
+      const res = await fetch('http://localhost:5000/login', {
+        method: 'POST',
+        body: JSON.stringify(userLoginData),
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      if (!res.ok) {
+        throw new Error(`Server error: ${res.statusText}`);
+      }
+
+      const jsonResponse = await res.json();
+
+      if (jsonResponse.message === 'Login successful!') {
+        // Store user data in localStorage
+        localStorage.setItem('user', JSON.stringify(jsonResponse.user));
+        // Redirect to home page after login
+        navigate('/');
+      } else {
+        console.log('Invalid credentials');
+      }
+    } catch (error) {
+      console.error('Error during login:', error);
+    }
   };
 
   return (
@@ -44,7 +64,7 @@ const LoginForm = () => {
             <Google className="text-teal-500 hover:text-teal-700 cursor-pointer" />
           </div>
 
-          <div className="flex flex-col items-center justify-center mt-4">
+          <form onSubmit={(e) => handleLogin(e)} className="flex flex-col items-center justify-center mt-4">
             <input
               id="loginEmail"
               name="loginEmail"
@@ -63,13 +83,12 @@ const LoginForm = () => {
               value={loginPassword}
               onChange={(e) => setLoginPassword(e.target.value)}
             />
-            <button
-              onClick={handleLogin}
+            <input
+              type='submit'
               className="rounded-2xl m-2 text-white bg-teal-500 w-3/5 px-4 py-2 shadow-md hover:text-teal-500 hover:bg-white border-[2px] border-teal-500 transition duration-300"
-            >
-              Sign In
-            </button>
-          </div>
+              value={"Sign In"}
+            />
+          </form>
 
           <p className="text-teal-500 m-4 text-sm">
             Don't have an account?

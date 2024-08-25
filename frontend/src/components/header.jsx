@@ -1,19 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const Header = () => {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    // Check for user data in localStorage
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
   return (
     <div>
       <header className="bg-white shadow-md p-4">
-        <div className="flex items-center justify-between">
-          {/* Left Section: Logo at the Top Left Corner */}
-          <div className="flex items-center">
-            <Link to="/" className="text-4xl text-teal-500 font-bold">UniHub</Link>
-          </div>
-        </div>
-
-        {/* Center Section: Location Selector & Search Bar */}
         <div className="flex items-center justify-center space-x-4 mt-4">
+          <div className="flex items-center justify-between">
+            {/* Logo */}
+            <div className="flex items-center">
+              <Link to="/" className="text-4xl text-teal-500 font-bold">UniHub</Link>
+            </div>
+          </div>
+
           {/* Location Dropdown */}
           <div className="flex items-center space-x-2">
             <span className="text-slate-700 font-semibold">Your Location:</span>
@@ -39,19 +48,20 @@ const Header = () => {
 
           {/* Right Section: Navigation Links */}
           <div className="flex items-center space-x-4 ml-auto">
-            {/* Login Button */}
-            <Link
-              className="text-slate-700 hover:text-teal-600 font-semibold hover:underline transition duration-300 ease-in-out"
-              to="/login"
-            >
-              Login
-            </Link>
-            <Link
-              className="text-slate-700 hover:text-teal-600 font-semibold hover:underline transition duration-300 ease-in-out"
-              to="/signup"
-            >
-              Signup
-            </Link>
+            {user ? (
+              // Show "Hi, user.name" when logged in
+              <div className="text-slate-700 font-semibold">
+                Hi, {user.name}
+              </div>
+            ) : (
+              // Show "Login" button when not logged in
+              <Link
+                className="text-slate-700 hover:text-teal-600 font-semibold hover:underline transition duration-300 ease-in-out"
+                to="/login"
+              >
+                Login
+              </Link>
+            )}
 
             {/* Sell Button */}
             <Link
