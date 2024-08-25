@@ -33,8 +33,9 @@ const SellSection = () => {
   useEffect(() => {
     const fetchListings = async () => {
       try {
-        const response = await fetch('http://localhost:5000/?email=your_email@example.com'); 
+        const response = await fetch('http://localhost:5000/allListings'); 
         const data = await response.json();
+        console.log(data);
 
         // Set marquee listings from first_json
         setMarqueeItems(data.first_json);
